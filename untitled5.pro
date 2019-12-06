@@ -16,17 +16,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    centralwidget.cpp \
     diagram.cpp \
     main.cpp \
-    mainwindow.cpp \
     project.cpp \
-    treewidget.cpp
+    treewidget.cpp \
+    umltabwidget/uml_highlighter.cpp \
+    umltabwidget/umltabwidget.cpp \
+    umltabwidget/umltexteditwidget.cpp
 
 HEADERS += \
+    centralwidget.h \
     diagram.h \
-    mainwindow.h \
+    globaldata.h \
     project.h \
-    treewidget.h
+    singleton.h \
+    treewidget.h \
+    umltabwidget/uml_highlighter.hpp \
+    umltabwidget/umltabwidget.h \
+    umltabwidget/umltexteditwidget.h
 
 FORMS +=
 

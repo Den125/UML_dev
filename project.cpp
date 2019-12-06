@@ -2,6 +2,8 @@
 #include <QFile>
 #include <QMap>
 #include <QTextStream>
+#include "globaldata.h"
+#include <QDir>
 
 using namespace std;
 
@@ -21,6 +23,9 @@ QVector<Diagram> read(QString file_name) {
         QString diag_path;
         textStream >> diag_path;
 
+        if (diag_path.isEmpty())
+            break;
+
         Diagram diag(read_diag(diag_path));
         diagrams.push_back(diag);
     }
@@ -33,10 +38,13 @@ Diagram read_diag(QString diag_path) {
     QString text;
 
     QFile file(diag_path + ".txt");
-    file.open(QIODevice::ReadOnly); // TODO check
-    QTextStream textStream(&file);
+    if (file.open(QIODevice::ReadOnly)) // TODO check
+    {
+        QTextStream textStream(&file);
+        return Diagram(type, name, textStream.readAll());
+    }
 
-    return Diagram(type, name, textStream.readAll());
+    return Diagram(type, name, "");
 }
 
 Diagram::Type string_to_type(QString type) {
@@ -68,4 +76,30 @@ QString type_to_string(Diagram::Type type) {
     return it->second;
 }
 
+void rewrite(QVector<Diagram> vector, QString file_name)
+{
+    QFile file(file_name);
+    if (!file.open(QIODevice::WriteOnly))
+        return;
+
+    QTextStream textStream(&file);
+    foreach(Diagram item,vector)
+    {
+        textStream << type_to_string(item.m_type) << '/' <<
+                      item.m_name << endl;
+    }
+}
+void save(Diagram diag)
+{
+    QDir directory(Singleton<GlobalData>::instance().project_path);
+    directory.mkdir(project_ns::type_to_string(diag.m_type));
+
+    QFile diagram (directory.path() + '/' + type_to_string(diag.m_type)+ '/' + diag.m_name + ".txt");
+    if (!diagram.open(QIODevice::WriteOnly))
+        return;
+    diagram.resize(0);
+
+    QTextStream stream(&diagram);
+    stream << diag.m_text;
+}
 }

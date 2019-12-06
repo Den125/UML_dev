@@ -2,6 +2,7 @@
 #define TREEWIDGET_H
 
 #include <QTreeWidget>
+#include <QSet>
 #include "diagram.h"
 
 class TreeWidget : public QTreeWidget
@@ -13,12 +14,20 @@ class TreeWidget : public QTreeWidget
 public:
     explicit TreeWidget(QWidget *parent = nullptr);
     void load(QVector<Diagram> project);
+    QString m_name;
 signals:
     void selected(Diagram);
+public slots:
+    void saveDiagram(Diagram diag);
 private slots:
-    void onItemSelected(QTreeWidgetItem *item, int column); //TODO: ...
+    void onItemSelected(QTreeWidgetItem *item, int column);
+    void menuClick(QPoint pos);
+    void deleteDiagram();
 private:
     QVector<Diagram> m_project;
+   // QSet<Diagram> m_project;
+
+
 };
 
 #endif // TREEWIDGET_H
