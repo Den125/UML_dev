@@ -1,6 +1,6 @@
 #include "umltexteditwidget.h"
 
-UMLTextEditWidget::UMLTextEditWidget(QWidget *parent,Diagram* diag)
+UMLTextEditWidget::UMLTextEditWidget(QWidget *parent, Diagram* diag)
     : QTextEdit(parent),
       m_diag(*diag)
 {
@@ -19,6 +19,6 @@ UMLTextEditWidget::UMLTextEditWidget(QWidget *parent,Diagram* diag)
 
 void UMLTextEditWidget::textChange()
 {
-    m_diag.m_text=toPlainText();
+    m_diag.m_text = toPlainText();
 }
 

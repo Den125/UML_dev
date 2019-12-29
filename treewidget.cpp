@@ -20,7 +20,6 @@ TreeWidget::TreeWidget(QWidget* parent)
 void TreeWidget::load(QVector<Diagram> project)
 {
     m_project = project;
-   // m_project.fromList(project.toList());
     std::sort(project.begin(), project.end(), [](const Diagram& a, const Diagram& b) {
         if (a.m_type != b.m_type) {
             return int (a.m_type) < int (b.m_type);
@@ -68,7 +67,7 @@ void TreeWidget::saveDiagram(Diagram diag)
         return;
     }
 
-    it->m_text=diag.m_text;
+    it->m_text = diag.m_text;
     project_ns::save(*it);
 }
 void TreeWidget::menuClick(QPoint pos)
@@ -76,8 +75,8 @@ void TreeWidget::menuClick(QPoint pos)
     if (currentItem()->type() == Type::Chapter) {
         return;
     }
-    QMenu *menu = new QMenu(this);
-    QAction *del = new QAction("Удалить диаграмму", this);
+    QMenu* menu = new QMenu(this);
+    QAction* del = new QAction("Удалить диаграмму", this);
     connect(del, SIGNAL(triggered()),
             this, SLOT(deleteDiagram()));
     menu->addAction(del);
@@ -93,7 +92,7 @@ void TreeWidget::deleteDiagram()
     if (unsaved.exec() != QMessageBox::Yes)
         return;
 
-   /* auto it = std::find_if(m_project.begin(), m_project.end(), [=](Diagram diagram) {
+    auto it = std::find_if(m_project.begin(), m_project.end(), [=](Diagram diagram) {
         return diagram.m_name == name;
     });
 
@@ -101,12 +100,6 @@ void TreeWidget::deleteDiagram()
         return;
     }
 
-   // m_project.removeOne(*it);
-
-    std::remove(m_project.begin(), m_project.end(),it);*/
-
-
-    //может использовать QMap вместо QVector
     for (int i = 0; i < m_project.count(); i++)
     {
         if (m_project[i].m_name == name)

@@ -19,7 +19,9 @@ SOURCES += \
     centralwidget.cpp \
     diagram.cpp \
     main.cpp \
+    picturewidget.cpp \
     project.cpp \
+    toolbar.cpp \
     treewidget.cpp \
     umltabwidget/uml_highlighter.cpp \
     umltabwidget/umltabwidget.cpp \
@@ -29,8 +31,10 @@ HEADERS += \
     centralwidget.h \
     diagram.h \
     globaldata.h \
+    picturewidget.h \
     project.h \
     singleton.h \
+    toolbar.h \
     treewidget.h \
     umltabwidget/uml_highlighter.hpp \
     umltabwidget/umltabwidget.h \
@@ -42,3 +46,6 @@ FORMS +=
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    resources.qrc

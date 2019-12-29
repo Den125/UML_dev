@@ -10,7 +10,7 @@ class UMLTextEditWidget : public QTextEdit
 public:
     explicit UMLTextEditWidget(QWidget *parent = nullptr, Diagram *diag=nullptr);
     Diagram m_diag;
-private:
+private slots:
     void textChange();
 };
 

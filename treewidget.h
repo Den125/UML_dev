@@ -25,8 +25,6 @@ private slots:
     void deleteDiagram();
 private:
     QVector<Diagram> m_project;
-   // QSet<Diagram> m_project;
-
 
 };
 

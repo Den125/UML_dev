@@ -38,7 +38,7 @@ Diagram read_diag(QString diag_path) {
     QString text;
 
     QFile file(diag_path + ".txt");
-    if (file.open(QIODevice::ReadOnly)) // TODO check
+    if (file.open(QIODevice::ReadOnly))
     {
         QTextStream textStream(&file);
         return Diagram(type, name, textStream.readAll());
@@ -101,5 +101,21 @@ void save(Diagram diag)
 
     QTextStream stream(&diagram);
     stream << diag.m_text;
+}
+bool create(QString path, QString name)
+{
+    QDir project(path);
+    if (project.exists(name))
+        return false;
+
+    if (!project.mkdir(name))
+        return false;
+
+    QVector<Diagram> vector = {Diagram(Diagram::Type::use_case,"use_case",""),
+                              Diagram(Diagram::Type::classes,"classes","")};
+
+    rewrite(vector,path+"/"+name+"/"+name+".upp");
+
+    return true;
 }
 }

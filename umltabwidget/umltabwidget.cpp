@@ -73,13 +73,13 @@ void UMLTabWidget::saveTab()
         return;
 
     emit save(Diagram(Diagram::Type::use_case, tabText(currentIndex()), m_tabs[currentIndex()]->toPlainText()));
-    setTabText(currentIndex(),m_tabs[currentIndex()]->m_diag.m_name);
+    setTabText(currentIndex(), m_tabs[currentIndex()]->m_diag.m_name);
 }
 
 void UMLTabWidget::saveTab(int index)
 {
     emit save(Diagram(Diagram::Type::use_case,tabText(index), m_tabs[index]->toPlainText()));
-    setTabText(index,m_tabs[index]->m_diag.m_name);
+    setTabText(index, m_tabs[index]->m_diag.m_name);
 }
 
 void UMLTabWidget::changeText()
