@@ -10,10 +10,12 @@ class UMLTabWidget : public QTabWidget
     Q_OBJECT
 public:
     explicit UMLTabWidget(QWidget* parent = nullptr);
+    Diagram currentDiagram();
 public slots:
     void createTab(Diagram diag);
     void saveTab();
     void saveTab(int index);
+    void saveTabs();
 signals:
     void save(Diagram diag);
 private slots:

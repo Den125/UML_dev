@@ -70,6 +70,7 @@ void TreeWidget::saveDiagram(Diagram diag)
     it->m_text = diag.m_text;
     project_ns::save(*it);
 }
+
 void TreeWidget::menuClick(QPoint pos)
 {
     if (currentItem()->type() == Type::Chapter) {
@@ -79,6 +80,8 @@ void TreeWidget::menuClick(QPoint pos)
     QAction* del = new QAction("Удалить диаграмму", this);
     connect(del, SIGNAL(triggered()),
             this, SLOT(deleteDiagram()));
+    QAction* pic = new QAction("Отобразить диаграмму",this);
+    menu->addAction(pic);
     menu->addAction(del);
     menu->popup(viewport()->mapToGlobal(pos));
 }
@@ -110,4 +113,19 @@ void TreeWidget::deleteDiagram()
     }
     delete currentItem();
     project_ns::rewrite(m_project, Singleton<GlobalData>::instance().project_path + '/' + m_name);
+}
+
+void TreeWidget::openImage()
+{
+    QString path=Singleton<GlobalData>::instance().project_path + '/' + m_name;
+
+    auto it = std::find_if(m_project.begin(), m_project.end(), [=](Diagram diagram) {
+        return diagram.m_name == currentItem()->text(currentColumn());
+    });
+
+    if (it == m_project.end()) {
+        return;
+    }
+    path = path + '/' + it->m_name + '.' + project_ns::type_to_string(it->m_type);
+    emit diagram(path);
 }

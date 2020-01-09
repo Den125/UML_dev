@@ -89,6 +89,7 @@ void rewrite(QVector<Diagram> vector, QString file_name)
                       item.m_name << endl;
     }
 }
+
 void save(Diagram diag)
 {
     QDir directory(Singleton<GlobalData>::instance().project_path);
@@ -102,6 +103,7 @@ void save(Diagram diag)
     QTextStream stream(&diagram);
     stream << diag.m_text;
 }
+
 bool create(QString path, QString name)
 {
     QDir project(path);

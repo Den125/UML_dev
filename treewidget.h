@@ -17,12 +17,14 @@ public:
     QString m_name;
 signals:
     void selected(Diagram);
+    void diagram(QString);
 public slots:
     void saveDiagram(Diagram diag);
 private slots:
     void onItemSelected(QTreeWidgetItem *item, int column);
     void menuClick(QPoint pos);
     void deleteDiagram();
+    void openImage();
 private:
     QVector<Diagram> m_project;
 

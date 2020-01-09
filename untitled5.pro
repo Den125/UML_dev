@@ -21,6 +21,7 @@ SOURCES += \
     main.cpp \
     picturewidget.cpp \
     project.cpp \
+    running.cpp \
     toolbar.cpp \
     treewidget.cpp \
     umltabwidget/uml_highlighter.cpp \
@@ -33,6 +34,7 @@ HEADERS += \
     globaldata.h \
     picturewidget.h \
     project.h \
+    running.h \
     singleton.h \
     toolbar.h \
     treewidget.h \

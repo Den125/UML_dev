@@ -17,7 +17,7 @@ void UMLTabWidget::createTab(Diagram diag)
     if (isSuchTabOpened(diag.m_name))
         return;
 
-    UMLTextEditWidget* tab = new UMLTextEditWidget(this, &diag);// diag.m_text);
+    UMLTextEditWidget* tab = new UMLTextEditWidget(this, &diag);
     addTab(tab, diag.m_name);
     setCurrentIndex(count()-1);
 
@@ -25,6 +25,7 @@ void UMLTabWidget::createTab(Diagram diag)
     connect(tab, SIGNAL(textChanged()),
             this, SLOT(changeText()));
 }
+
 bool UMLTabWidget::isSuchTabOpened(const QString &name)
 {
     for (int i = 0; i < count(); i++)
@@ -72,13 +73,13 @@ void UMLTabWidget::saveTab()
     if (count() == 0)
         return;
 
-    emit save(Diagram(Diagram::Type::use_case, tabText(currentIndex()), m_tabs[currentIndex()]->toPlainText()));
+    emit save(Diagram(Diagram::Type::use_case, tabText(currentIndex()), m_tabs[currentIndex()]->toPlainText()));//
     setTabText(currentIndex(), m_tabs[currentIndex()]->m_diag.m_name);
 }
 
 void UMLTabWidget::saveTab(int index)
 {
-    emit save(Diagram(Diagram::Type::use_case,tabText(index), m_tabs[index]->toPlainText()));
+    emit save(Diagram(Diagram::Type::use_case,tabText(index), m_tabs[index]->toPlainText()));//
     setTabText(index, m_tabs[index]->m_diag.m_name);
 }
 
@@ -86,4 +87,15 @@ void UMLTabWidget::changeText()
 {
    int i=m_tabs.indexOf(dynamic_cast<UMLTextEditWidget*>(sender()));
    setTabText(i,m_tabs[i]->m_diag.m_name+'*');
+}
+
+Diagram UMLTabWidget::currentDiagram()
+{
+    return  m_tabs[currentIndex()]->m_diag;
+}
+
+void UMLTabWidget::saveTabs()
+{
+    for (int i=0;i<count();i++)
+        saveTab(i);
 }
