@@ -3,12 +3,14 @@
 
 #include <QMainWindow>
 #include <QDockWidget>
-#include "treewidget.h"
-#include "umltabwidget/umltabwidget.h"
-#include "picturewidget.h"
+
+class TreeWidget;
+class UMLTabWidget;
+class PictureWidget;
+class Running;
+class ToolBar;
 #include "singleton.h"
-#include "toolbar.h"
-#include "running.h"
+
 
 class CentralWidget : public QMainWindow
 {
@@ -21,7 +23,13 @@ public slots:
     void openProject();
     void closeProject();
     void building();
+    void showOrHide(int);
+private slots:
+    void closeEvent(QCloseEvent* event);
+
 private:
+    void open_ini();
+
     TreeWidget *m_tree;
     UMLTabWidget *m_tabs;
     PictureWidget *m_picture;
