@@ -1,4 +1,5 @@
 #include "umltexteditwidget.h"
+#include <QDebug>
 
 UMLTextEditWidget::UMLTextEditWidget(QWidget *parent, Diagram* diag)
     : QTextEdit(parent),

@@ -24,11 +24,13 @@ public slots:
     void closeProject();
     void building();
     void showOrHide(int);
+    void endBuilding();
 private slots:
     void closeEvent(QCloseEvent* event);
 
 private:
     void open_ini();
+    void createWorkspace();
 
     TreeWidget *m_tree;
     UMLTabWidget *m_tabs;

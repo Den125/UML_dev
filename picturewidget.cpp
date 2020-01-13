@@ -1,4 +1,5 @@
 #include "picturewidget.h"
+#include <QDebug>
 
 PictureWidget::PictureWidget(QWidget *parent):QWidget (parent)
 {
@@ -7,6 +8,7 @@ PictureWidget::PictureWidget(QWidget *parent):QWidget (parent)
 
 void PictureWidget::loadImage(const QString &fileName)
 {
+    qDebug()<<fileName;
     if(!fileName.isNull())
     {
         m_Image.load(fileName);

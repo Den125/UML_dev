@@ -4,13 +4,13 @@
 #include <QTextStream>
 #include "globaldata.h"
 #include <QDir>
-
+#include <QDebug>
 using namespace std;
 
 namespace project_ns
 {
 
-Diagram read_diag(QString diag_path);
+Diagram read_diag(QString diag_path, QString project_path);
 Diagram::Type string_to_type(QString type);
 
 QVector<Diagram> read(QString file_name) {
@@ -19,6 +19,7 @@ QVector<Diagram> read(QString file_name) {
     QTextStream textStream(&file);
 
     QVector<Diagram> diagrams;
+    file_name.truncate(file_name.lastIndexOf('/'));
     while (!textStream.atEnd()) {
         QString diag_path;
         textStream >> diag_path;
@@ -26,18 +27,18 @@ QVector<Diagram> read(QString file_name) {
         if (diag_path.isEmpty())
             break;
 
-        Diagram diag(read_diag(diag_path));
+        Diagram diag(read_diag(diag_path,file_name));
         diagrams.push_back(diag);
     }
     return diagrams;
 }
 
-Diagram read_diag(QString diag_path) {
+Diagram read_diag(QString diag_path,QString project_path) {
     QString name = diag_path.split("/")[1];
     Diagram::Type type = string_to_type(diag_path.split("/")[0]);
     QString text;
 
-    QFile file(diag_path + ".txt");
+    QFile file(project_path+'/'+diag_path + ".txt");
     if (file.open(QIODevice::ReadOnly))
     {
         QTextStream textStream(&file);
