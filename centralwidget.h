@@ -2,8 +2,8 @@
 #define CENTRAL_WIDGET_H
 
 #include <QMainWindow>
-#include <QDockWidget>
 
+class QDockWidget;
 class TreeWidget;
 class UMLTabWidget;
 class PictureWidget;

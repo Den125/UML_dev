@@ -1,5 +1,6 @@
 #ifndef DIAGRAM_H
 #define DIAGRAM_H
+
 #include <QString>
 
 class Diagram {

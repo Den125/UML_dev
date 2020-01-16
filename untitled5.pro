@@ -51,3 +51,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resources.qrc
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-analyzer-Desktop_Qt_5_9_1_MinGW_32bit-Release/release/ -lanalyzer
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-analyzer-Desktop_Qt_5_9_1_MinGW_32bit-Debug/debug/ -lanalyzer
+else:unix: LIBS += -L$$PWD/../build-analyzer-Desktop_Qt_5_9_1_MinGW_32bit-Release/ -lanalyzer
+
+INCLUDEPATH += $$PWD/../analyzer
+DEPENDPATH += $$PWD/../analyzer

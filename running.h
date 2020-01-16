@@ -1,8 +1,8 @@
 #ifndef RUNNING_H
 #define RUNNING_H
 
-#include <QString>
 #include <QProcess>
+#include <QString>
 
 class Running:public QObject
 

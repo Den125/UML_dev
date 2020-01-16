@@ -1,7 +1,6 @@
 #include "centralwidget.h"
-#include <QGridLayout>
+#include <QDockWidget>
 #include <QCloseEvent>
-#include <QDebug>
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QSettings>
@@ -12,7 +11,7 @@
 #include "picturewidget.h"
 #include "toolbar.h"
 #include "running.h"
-#include <QEventLoop>
+#include <QDebug>
 
 CentralWidget::CentralWidget(QWidget *parent)
     : QMainWindow(parent),      
@@ -21,6 +20,7 @@ CentralWidget::CentralWidget(QWidget *parent)
       m_structure(new QDockWidget("Структура проекта", this)),
       m_tool(new ToolBar(this))
 {
+    setWindowTitle("Средство проектирования ПО");
     addToolBar(m_tool);
     m_tool->activateActions(false);
 
@@ -54,6 +54,7 @@ void CentralWidget::newProject()
         m_tree->m_name = name;
         m_tree->load(project_ns::read(dir+"/"+name+"/"+name+".upp"));
         m_tool->activateActions(true);
+        setWindowTitle("Средство проектирования ПО - " + name);
     }
 
 }
@@ -72,7 +73,7 @@ void CentralWidget::openProject()
     Singleton<GlobalData>::instance().project_path = path.left(path.lastIndexOf('/'));
 
     m_tree->m_name = path.remove(0, path.lastIndexOf('/') + 1);
-
+    setWindowTitle("Средство проектирования ПО - " + m_tree->m_name);
     m_tool->activateActions(true);
 }
 
@@ -81,22 +82,32 @@ void CentralWidget::createWorkspace()
     m_tree = new TreeWidget(this);
     m_tabs = new UMLTabWidget(this);
     m_picture = new PictureWidget(this);
+    m_run = new Running(this);
 
     m_structure->setWidget(m_tree);
     m_file->setWidget(m_tabs);
     m_image->setWidget(m_picture);
+
+    connect(m_tool, SIGNAL(analyze()), m_tree, SLOT(analyze()));
+    connect(m_tool, SIGNAL(saveDiagram()), m_tabs, SLOT(saveTab()));
     connect(m_tree, SIGNAL(selected(Diagram)), m_tabs, SLOT(createTab(Diagram)));
     connect(m_tree, SIGNAL(diagram(QString)), m_picture, SLOT(loadImage(QString)));
     connect(m_tabs, SIGNAL(save(Diagram)), m_tree, SLOT(saveDiagram(Diagram)));
-    m_run = new Running();
+
     connect(m_run, SIGNAL(complete(QString)), m_picture, SLOT(loadImage(QString)));
     connect(m_run, SIGNAL(complete(QString)), this, SLOT(endBuilding()));
 }
 
-void CentralWidget::closeProject()//не закончен
+void CentralWidget::closeProject()
 {
     m_tabs->saveTabs();
     m_tool->activateActions(false);
+    setWindowTitle("Средство проектирования ПО");
+    delete m_tree;
+    delete m_tabs;
+    delete m_picture;
+    delete m_run;
+    Singleton<GlobalData>::instance().project_path.clear();
 }
 
 void CentralWidget::building()

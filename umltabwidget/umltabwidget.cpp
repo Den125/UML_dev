@@ -70,6 +70,7 @@ void UMLTabWidget::closeTab(int index)
 
 void UMLTabWidget::saveTab()
 {
+    qDebug()<<"check";
     if (count() == 0)
         return;
 

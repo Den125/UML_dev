@@ -2,8 +2,8 @@
 #define TREEWIDGET_H
 
 #include <QTreeWidget>
-#include <QSet>
 #include "diagram.h"
+#include "analyzer.h"
 
 class TreeWidget : public QTreeWidget
 {
@@ -20,6 +20,7 @@ signals:
     void diagram(QString);
 public slots:
     void saveDiagram(Diagram diag);
+    void analyze();
 private slots:
     void onItemSelected(QTreeWidgetItem *item, int column);
     void menuClick(QPoint pos);

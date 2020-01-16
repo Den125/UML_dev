@@ -9,5 +9,6 @@
         <file>resource/open.png</file>
         <file>resource/save.png</file>
         <file>resource/save_all.png</file>
+        <file>resource/analyze.png</file>
     </qresource>
 </RCC>

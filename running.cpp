@@ -1,5 +1,6 @@
 #include "running.h"
 #include <QDebug>
+
 Running::Running(QObject *parent)
     : QObject(parent) {
     m_process=new QProcess(this);

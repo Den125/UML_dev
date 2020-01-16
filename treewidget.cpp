@@ -19,6 +19,7 @@ TreeWidget::TreeWidget(QWidget* parent)
 
 void TreeWidget::load(QVector<Diagram> project)
 {
+    clear();
     m_project = project;
     std::sort(project.begin(), project.end(), [](const Diagram& a, const Diagram& b) {
         if (a.m_type != b.m_type) {
@@ -128,4 +129,9 @@ void TreeWidget::openImage()
     }
     path = path + '/' + it->m_name + '.' + project_ns::type_to_string(it->m_type);
     emit diagram(path);
+}
+
+void TreeWidget::analyze()
+{
+    load(Analyzer::analyze(m_project));
 }
