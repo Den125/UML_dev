@@ -1,5 +1,5 @@
-#ifndef SEQUENCEWIDGET_H
-#define SEQUENCEWIDGET_H
+#ifndef PRECEDENTWIDGET_H
+#define PRECEDENTWIDGET_H
 
 #include <QObject>
 #include <QWidget>
@@ -21,8 +21,8 @@ private slots:
     void setGoal(QString goal);
     void setFace(QString goal);
 private:
-    Structures::precedentData m_data;
+    structures::precedentData m_data;
     QString m_name;
 };
 
-#endif // SEQUENCEWIDGET_H
+#endif // PRECEDENTWIDGET_H

@@ -17,6 +17,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     centralwidget.cpp \
+    description/description_analyze.cpp \
+    description/descriptionwidget.cpp \
+    description/precedentwidget.cpp \
+    description/structures.cpp \
     diagram.cpp \
     main.cpp \
     picturewidget.cpp \
@@ -30,6 +34,10 @@ SOURCES += \
 
 HEADERS += \
     centralwidget.h \
+    description/description_analyze.h \
+    description/descriptionwidget.h \
+    description/precedentwidget.h \
+    description/structures.h \
     diagram.h \
     globaldata.h \
     picturewidget.h \

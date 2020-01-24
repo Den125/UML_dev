@@ -8,7 +8,7 @@ class ToolBar: public  QToolBar
 {
     Q_OBJECT
 public:
-    explicit ToolBar(QWidget *parent = nullptr);
+    explicit ToolBar(QWidget *parent = nullptr, bool picW=true, bool fileW=true, bool treeW=true);
     void activateActions(bool flag);
 
 signals:
@@ -18,16 +18,18 @@ signals:
     void saveDiagram();
     void saveAll();
     void buildDiagram();
-    void visible(int ind);
+
+    void visibleStructure(bool is_visible);
+    void visiblePicture(bool is_visible);
+    void visibleFile(bool is_visible);
+
     void analyze();
-private slots:
-    void showOrHidePicture();
-    void showOrHideStructure();
-    void showOrHideFile();
+    void description();
 
 private:
-    QAction *m_newA, *m_openA, *m_closeA, *m_saveDg, *m_run, *m_saveAll, *m_fileDW,
-            *m_treeDW, *m_pictureDW, *m_analyze;
+    QAction*m_closeA, *m_saveDg, *m_run, *m_saveAll,*m_analyze,*m_description;
+    /* *m_newA, *m_openA,*/ /* *m_fileDW,
+            *m_treeDW, *m_pictureDW, */
 };
 
 #endif // TOOLBAR_H

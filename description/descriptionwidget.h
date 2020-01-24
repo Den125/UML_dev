@@ -4,7 +4,8 @@
 #include <QDialog>
 #include <QObject>
 #include <QWidget>
-#include "structures.h"
+#include <QMap>
+
 
 class PrecedentWidget;
 

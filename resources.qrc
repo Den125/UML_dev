@@ -10,5 +10,6 @@
         <file>resource/save.png</file>
         <file>resource/save_all.png</file>
         <file>resource/analyze.png</file>
+        <file>resource/description.png</file>
     </qresource>
 </RCC>

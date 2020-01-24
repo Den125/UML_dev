@@ -1,6 +1,5 @@
 #include "project.h"
 #include <QFile>
-//#include <QMap>
 #include <QTextStream>
 #include <QDir>
 #include <QDebug>

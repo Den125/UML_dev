@@ -11,29 +11,36 @@
 #include "picturewidget.h"
 #include "toolbar.h"
 #include "running.h"
+#include "description/descriptionwidget.h"
 #include <QDebug>
 
 CentralWidget::CentralWidget(QWidget *parent)
     : QMainWindow(parent),      
       m_file(new QDockWidget("Активные файлы", this)),
       m_image(new QDockWidget("Диаграмма", this)),
-      m_structure(new QDockWidget("Структура проекта", this)),
-      m_tool(new ToolBar(this))
+      m_structure(new QDockWidget("Структура проекта", this))
 {
     setWindowTitle("Средство проектирования ПО");
-    addToolBar(m_tool);
-    m_tool->activateActions(false);
 
     addDockWidget(Qt::LeftDockWidgetArea, m_structure);
     addDockWidget(Qt::RightDockWidgetArea, m_file);
     addDockWidget(Qt::BottomDockWidgetArea, m_image);
 
+    open_ini();
+
+    m_tool = new ToolBar(this,m_image->isVisible(),m_file->isVisible(),m_structure->isVisible());
+    addToolBar(m_tool);
+    m_tool->activateActions(false);
+
     connect(m_tool, SIGNAL(newProject()), this, SLOT(newProject()));
     connect(m_tool, SIGNAL(openProject()), this, SLOT(openProject()));
     connect(m_tool, SIGNAL(closeProject()), this, SLOT(closeProject()));
     connect(m_tool, SIGNAL(buildDiagram()), this, SLOT(building()));
-    connect(m_tool, SIGNAL(visible(int)), this, SLOT(showOrHide(int)));
-    open_ini();
+    connect(m_tool, SIGNAL(description()), this, SLOT(description()));
+    connect(m_tool, SIGNAL(visibleStructure(bool)), this, SLOT(setStructureVisible(bool)));
+    connect(m_tool, SIGNAL(visiblePicture(bool)), this, SLOT(setPictureVisible(bool)));
+    connect(m_tool, SIGNAL(visibleFile(bool)), this, SLOT(setFileVisible(bool)));
+
 }
 
 void CentralWidget::newProject()
@@ -54,6 +61,7 @@ void CentralWidget::newProject()
         m_tree->m_name = name;
         m_tree->load(project_ns::read(dir+"/"+name+"/"+name+".upp"));
         m_tool->activateActions(true);
+        name.chop(4);
         setWindowTitle("Средство проектирования ПО - " + name);
     }
 
@@ -88,11 +96,12 @@ void CentralWidget::createWorkspace()
     m_file->setWidget(m_tabs);
     m_image->setWidget(m_picture);
 
-    connect(m_tool, SIGNAL(analyze()), m_tree, SLOT(analyze()));
+    connect(m_tool, SIGNAL(analyze()), this, SLOT(analyzing()));
     connect(m_tool, SIGNAL(saveDiagram()), m_tabs, SLOT(saveTab()));
     connect(m_tree, SIGNAL(selected(Diagram)), m_tabs, SLOT(createTab(Diagram)));
     connect(m_tree, SIGNAL(diagram(QString)), m_picture, SLOT(loadImage(QString)));
     connect(m_tabs, SIGNAL(save(Diagram)), m_tree, SLOT(saveDiagram(Diagram)));
+    connect(m_tree, SIGNAL(update(QVector<Diagram>)), m_tabs, SLOT(updateTabs(QVector<Diagram>)));
 
     connect(m_run, SIGNAL(complete(QString)), m_picture, SLOT(loadImage(QString)));
     connect(m_run, SIGNAL(complete(QString)), this, SLOT(endBuilding()));
@@ -187,12 +196,43 @@ void CentralWidget::closeEvent(QCloseEvent* event)
     event->accept();
 }
 
-void CentralWidget::showOrHide(int ind)
+void CentralWidget::setStructureVisible(bool visible)
 {
-    QMap<int,QDockWidget*> map_widgets = {
-        {1,m_file},
-        {2,m_structure},
-        {3,m_image}
-    };
-    map_widgets.value(ind)->setVisible(!map_widgets.value(ind)->isVisible());
+    m_structure->setVisible(visible);
+}
+
+void CentralWidget::setFileVisible(bool visible)
+{
+    m_file->setVisible(visible);
+}
+
+void CentralWidget::setPictureVisible(bool visible)
+{
+    m_image->setVisible(visible);
+}
+
+void CentralWidget::analyzing()
+{
+    m_tabs->saveTabs();
+    m_tree->analyze();
+}
+
+void CentralWidget::description()
+{
+    QStringList robustness_list=m_tree->getRobustnessList(), actors_list;
+    if (robustness_list.isEmpty())
+    {
+        //вывод сообщения
+        return;
+    }
+    QMap<QString,QStringList> map_actors=m_tree->getActors();
+    actors_list=map_actors.keys();
+    DescriptionWidget *m_descriptionWidget=new DescriptionWidget(this,robustness_list,map_actors);
+    connect(m_descriptionWidget,SIGNAL(finished(int)),this,SLOT(closeDescription()));
+    m_descriptionWidget->show();
+}
+void CentralWidget::closeDescription()
+{
+    qDebug()<<"check";
+    m_tree->analyze_descirption();
 }

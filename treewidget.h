@@ -14,10 +14,14 @@ class TreeWidget : public QTreeWidget
 public:
     explicit TreeWidget(QWidget *parent = nullptr);
     void load(QVector<Diagram> project);
+    QMap<QString,QStringList> getActors();
+    QStringList getRobustnessList();
+    void analyze_descirption();
     QString m_name;
 signals:
     void selected(Diagram);
     void diagram(QString);
+    void update(QVector<Diagram>);
 public slots:
     void saveDiagram(Diagram diag);
     void analyze();

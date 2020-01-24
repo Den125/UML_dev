@@ -20,6 +20,5 @@ void Running::run(QString fileName)
 void Running::command_complete(int exitCode)
 {
     FileName.chop(4);
-    qDebug()<<exitCode<<FileName;
     emit complete(FileName+".png");
 }

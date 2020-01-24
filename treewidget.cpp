@@ -6,6 +6,7 @@
 #include "diagram.h"
 #include "project.h"
 #include "globaldata.h"
+#include "description/description_analyze.h"
 
 TreeWidget::TreeWidget(QWidget* parent)
     : QTreeWidget(parent) {
@@ -134,4 +135,30 @@ void TreeWidget::openImage()
 void TreeWidget::analyze()
 {
     load(Analyzer::analyze(m_project));
+    project_ns::rewrite(m_project, Singleton<GlobalData>::instance().project_path + '/' + m_name);
+    emit update(m_project);
+}
+
+QMap<QString,QStringList> TreeWidget::getActors()
+{
+    return Analyzer::get_actors_list(m_project);
+}
+
+QStringList TreeWidget::getRobustnessList()
+{
+    QStringList list;
+    foreach (Diagram diag, m_project)
+    {
+        if (diag.m_type==Diagram::Type::robustness)
+        {
+            list.append(diag.m_name);
+        }
+    }
+    return list;
+
+}
+void TreeWidget::analyze_descirption()
+{
+    load(description_analyze::analyze(m_project,Singleton<GlobalData>::instance().project_path + "/description.json"));
+    project_ns::rewrite(m_project, Singleton<GlobalData>::instance().project_path + '/' + m_name);
 }

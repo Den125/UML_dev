@@ -13,11 +13,12 @@
 #include <QTableWidget>
 #include <QHeaderView>
 #include <QDebug>
+
 PrecedentWidget::PrecedentWidget(QWidget *parent, QString text, QStringList list_actors)
     :QWidget(parent)
 {
     m_name=text;
-    m_data=Structures::loadPrecedent(m_name);
+    m_data=structures::loadPrecedent(m_name);
     QVBoxLayout *layout=new QVBoxLayout(this);
     QFormLayout *form_layout=new QFormLayout;
     QComboBox *face=new QComboBox(this);
@@ -147,16 +148,16 @@ void PrecedentWidget::savePrecedent()
     m_data.seqVect.clear();
     for (int i=0;i<tab->count();i++)
     {
-        Structures::sequenceData seq;
+        structures::sequenceData seq;
         QTableWidget *table;
         if (i==0)
         {
-            seq.type=Structures::main_seq;
+            seq.type=structures::main_seq;
             table=dynamic_cast<QTableWidget*>(tab->widget(i));
         }
         else
         {
-            seq.type=Structures::alt_seq;
+            seq.type=structures::alt_seq;
             table=dynamic_cast<QTableWidget*>(tab->widget(i)->findChild<QTableWidget*>());
             QLineEdit *line=dynamic_cast<QLineEdit*>(tab->widget(i)->findChild<QLineEdit*>());
             seq.usl=line->text();
@@ -168,7 +169,7 @@ void PrecedentWidget::savePrecedent()
         }
         m_data.seqVect.push_back(seq);
     }
-    Structures::savePrecedent(m_name,m_data);
+    structures::savePrecedent(m_name,m_data);
 }
 
 void PrecedentWidget::set_into_table()

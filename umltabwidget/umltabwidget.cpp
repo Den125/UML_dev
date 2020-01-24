@@ -70,7 +70,6 @@ void UMLTabWidget::closeTab(int index)
 
 void UMLTabWidget::saveTab()
 {
-    qDebug()<<"check";
     if (count() == 0)
         return;
 
@@ -100,5 +99,28 @@ void UMLTabWidget::saveTabs()
     for (int i=0;i<count();i++)
     {
         saveTab(i);
+    }
+}
+
+int UMLTabWidget::getIndex(const QString &name)
+{
+    for (int i=0;i<m_tabs.count();i++)
+    {
+        if (m_tabs[i]->m_diag.m_name==name)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void UMLTabWidget::updateTabs(QVector<Diagram> diagrams)
+{
+    foreach(Diagram diag,diagrams)
+    {
+        if (isSuchTabOpened(diag.m_name))
+        {
+            m_tabs[getIndex(diag.m_name)]->setText(diag.m_text);
+        }
     }
 }

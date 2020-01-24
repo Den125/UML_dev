@@ -23,11 +23,17 @@ public slots:
     void openProject();
     void closeProject();
     void building();
-    void showOrHide(int);
     void endBuilding();
+    void analyzing();
+    void description();
+
+    void setStructureVisible(bool visible);
+    void setFileVisible(bool visible);
+    void setPictureVisible(bool visible);
+
 private slots:
     void closeEvent(QCloseEvent* event);
-
+    void closeDescription();
 private:
     void open_ini();
     void createWorkspace();
