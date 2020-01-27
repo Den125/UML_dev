@@ -26,6 +26,7 @@ public slots:
     void endBuilding();
     void analyzing();
     void description();
+    void reportGenerate();
 
     void setStructureVisible(bool visible);
     void setFileVisible(bool visible);

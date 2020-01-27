@@ -15,6 +15,7 @@ ToolBar::ToolBar(QWidget* parent, bool picW, bool fileW, bool treeW)
     m_saveAll = new QAction(QIcon(":/resource/save_all.png"), "Сохранить все диаграммы", this);
     m_analyze = new QAction(QIcon(":/resource/analyze.png"), "Анализировать", this);
     m_description = new QAction(QIcon(":/resource/description.png"),"Открыть описание", this);
+    m_report = new QAction(QIcon(":/resource/report.png"),"Генерировать отчет", this);
     QAction *m_fileDW = new QAction(QIcon(":/resource/file.png"), "Показать/скрыть файловый виджет", this);
     m_fileDW->setCheckable(true);
     m_fileDW->setChecked(fileW);
@@ -29,7 +30,7 @@ ToolBar::ToolBar(QWidget* parent, bool picW, bool fileW, bool treeW)
     addSeparator();
     addActions(QList<QAction*> {m_fileDW, m_treeDW, m_pictureDW});
     addSeparator();
-    addActions(QList<QAction*> {m_run, m_saveDg, m_saveAll, m_analyze, m_description});
+    addActions(QList<QAction*> {m_run, m_saveDg, m_saveAll, m_analyze, m_description, m_report});
 
     connect(m_newA, SIGNAL(triggered()), SIGNAL(newProject()));
     connect(m_openA, SIGNAL(triggered()), SIGNAL(openProject()));
@@ -42,6 +43,7 @@ ToolBar::ToolBar(QWidget* parent, bool picW, bool fileW, bool treeW)
     connect(m_pictureDW, SIGNAL(toggled(bool)), SIGNAL(visiblePicture(bool)));
     connect(m_analyze, SIGNAL(triggered()), SIGNAL(analyze()));
     connect(m_description, SIGNAL(triggered()), SIGNAL(description()));
+    connect(m_report, SIGNAL(triggered()), SIGNAL(report()));
 }
 
 void ToolBar::activateActions(bool flag)
@@ -52,4 +54,5 @@ void ToolBar::activateActions(bool flag)
     m_saveAll->setEnabled(flag);
     m_analyze->setEnabled(flag);
     m_description->setEnabled(flag);
+    m_report->setEnabled(flag);
 }

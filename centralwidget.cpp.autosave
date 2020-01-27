@@ -226,8 +226,9 @@ void CentralWidget::description()
     QStringList robustness_list=m_tree->getRobustnessList(), actors_list;
     if (robustness_list.isEmpty())
     {
-        QMessageBox
-        //вывод сообщения
+        QMessageBox info(QMessageBox::Icon::Warning, "Ошибка",
+                         "Диаграммы робастности не обнаружены. Невозможно редактировать описание");
+        info.exec();
         return;
     }
     QMap<QString,QStringList> map_actors=m_tree->getActors();
@@ -238,6 +239,7 @@ void CentralWidget::description()
 }
 void CentralWidget::closeDescription()
 {
+    m_tabs->saveTabs();
     m_tree->analyze_descirption();
 }
 
