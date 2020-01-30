@@ -20,8 +20,11 @@ TreeWidget::TreeWidget(QWidget* parent)
 
 void TreeWidget::load(QVector<Diagram> project)
 {
-    clear();
-    m_project = project;
+   clear();
+   checkDeleted(project);
+   updateTree(project);
+   m_project = project;
+
     std::sort(project.begin(), project.end(), [](const Diagram& a, const Diagram& b) {
         if (a.m_type != b.m_type) {
             return int (a.m_type) < int (b.m_type);
@@ -40,6 +43,14 @@ void TreeWidget::load(QVector<Diagram> project)
         if (chapter) {
             QTreeWidgetItem *item = new QTreeWidgetItem(chapter, Type::Item);
             item->setText(0, project[i].m_name);
+            if (std::find(deleted.begin(), deleted.end(),  project[i].m_name) != deleted.end()) {
+               item->setTextColor(0,Qt::red);
+            }
+            else
+            {
+                item->setTextColor(0,Qt::black);
+                deleted.remove(project[i].m_name);
+            }
         }
     }
 }
@@ -83,6 +94,8 @@ void TreeWidget::menuClick(QPoint pos)
     connect(del, SIGNAL(triggered()),
             this, SLOT(deleteDiagram()));
     QAction* pic = new QAction("Отобразить диаграмму",this);
+    connect(pic, SIGNAL(triggered()),
+            this, SLOT(openImage()));
     menu->addAction(pic);
     menu->addAction(del);
     menu->popup(viewport()->mapToGlobal(pos));
@@ -119,8 +132,6 @@ void TreeWidget::deleteDiagram()
 
 void TreeWidget::openImage()
 {
-    QString path=Singleton<GlobalData>::instance().project_path + '/' + m_name;
-
     auto it = std::find_if(m_project.begin(), m_project.end(), [=](Diagram diagram) {
         return diagram.m_name == currentItem()->text(currentColumn());
     });
@@ -128,14 +139,17 @@ void TreeWidget::openImage()
     if (it == m_project.end()) {
         return;
     }
-    path = path + '/' + it->m_name + '.' + project_ns::type_to_string(it->m_type);
+
+    QString path = Singleton<GlobalData>::instance().project_path + '/' +
+            project_ns::type_to_string(it->m_type) + '/' + it->m_name + ".png";
+
     emit diagram(path);
 }
 
 void TreeWidget::analyze()
 {
     load(Analyzer::analyze(m_project));
-    project_ns::rewrite(m_project, Singleton<GlobalData>::instance().project_path + '/' + m_name);
+    saveProject();
     emit update(m_project);
 }
 
@@ -157,8 +171,53 @@ QStringList TreeWidget::getRobustnessList()
     return list;
 
 }
+
 void TreeWidget::analyze_descirption()
 {
     load(description_analyze::analyze(m_project,Singleton<GlobalData>::instance().project_path + "/description.json"));
+    saveProject();
+    emit update(m_project);
+}
+
+void TreeWidget::checkDeleted(QVector<Diagram> diagrams)
+{
+    foreach (Diagram diag,m_project)
+    {
+        auto it = std::find_if(diagrams.begin(), diagrams.end(), [=](Diagram diagram) {
+            return diagram.m_name == diag.m_name;
+        });
+
+        if (it == diagrams.end())
+        {
+            deleted.insert(diag.m_name);
+        }
+        else
+        {
+            deleted.remove(diag.m_name);
+        }
+    }
+}
+
+void TreeWidget::updateTree(QVector<Diagram>& diagrams)
+{
+    for (int i=0;i<m_project.count();i++)
+    {
+        auto it = std::find_if(diagrams.begin(), diagrams.end(), [=](Diagram diagram) {
+            return diagram.m_name == m_project[i].m_name;
+        });
+
+        if (it == diagrams.end()) {
+
+            diagrams.push_back(m_project[i]);
+        }
+    }
+}
+
+void TreeWidget::saveProject()
+{
     project_ns::rewrite(m_project, Singleton<GlobalData>::instance().project_path + '/' + m_name);
+    for (int i=0;i<m_project.count();i++)
+    {
+        project_ns::save(m_project[i]);
+    }
 }

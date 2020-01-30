@@ -36,6 +36,7 @@ CentralWidget::CentralWidget(QWidget *parent)
 
     connect(m_tool, SIGNAL(newProject()), this, SLOT(newProject()));
     connect(m_tool, SIGNAL(openProject()), this, SLOT(openProject()));
+
     connect(m_tool, SIGNAL(closeProject()), this, SLOT(closeProject()));
     connect(m_tool, SIGNAL(buildDiagram()), this, SLOT(building()));
     connect(m_tool, SIGNAL(description()), this, SLOT(description()));
@@ -98,6 +99,7 @@ void CentralWidget::createWorkspace()
     m_file->setWidget(m_tabs);
     m_image->setWidget(m_picture);
 
+    connect(m_tool, SIGNAL(saveProject()), m_tree, SLOT(saveProject()));
     connect(m_tool, SIGNAL(analyze()), this, SLOT(analyzing()));
     connect(m_tool, SIGNAL(saveDiagram()), m_tabs, SLOT(saveTab()));
     connect(m_tool, SIGNAL(saveAll()), m_tabs, SLOT(saveTabs()));
@@ -226,8 +228,9 @@ void CentralWidget::description()
     QStringList robustness_list=m_tree->getRobustnessList(), actors_list;
     if (robustness_list.isEmpty())
     {
-        QMessageBox
-        //вывод сообщения
+        QMessageBox info(QMessageBox::Icon::Warning, "Ошибка",
+                         "Диаграммы робастности не обнаружены. Невозможно редактировать описание");
+        info.exec();
         return;
     }
     QMap<QString,QStringList> map_actors=m_tree->getActors();
@@ -236,8 +239,10 @@ void CentralWidget::description()
     connect(m_descriptionWidget,SIGNAL(finished(int)),this,SLOT(closeDescription()));
     m_descriptionWidget->show();
 }
+
 void CentralWidget::closeDescription()
 {
+    m_tabs->saveTabs();
     m_tree->analyze_descirption();
 }
 

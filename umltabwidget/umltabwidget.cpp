@@ -121,6 +121,7 @@ void UMLTabWidget::updateTabs(QVector<Diagram> diagrams)
         if (isSuchTabOpened(diag.m_name))
         {
             m_tabs[getIndex(diag.m_name)]->setText(diag.m_text);
+            setTabText(getIndex(diag.m_name), m_tabs[getIndex(diag.m_name)]->m_diag.m_name);
         }
     }
 }

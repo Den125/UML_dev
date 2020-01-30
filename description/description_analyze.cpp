@@ -8,6 +8,18 @@
 bool description_analyze::equalNames(const Diagram& lhs, const Diagram& rhs) {
     return lhs.m_name == rhs.m_name;
 }
+void description_analyze::remove(const Diagram& diag, QVector<Diagram>& diagrams)
+{
+
+    for (int i=0;i<diagrams.count();i++)
+    {
+        if (diag.m_name==diagrams[i].m_name)
+        {
+            diagrams.remove(i);
+            return;
+        }
+    }
+}
 void description_analyze::insert(const Diagram& diag, QVector<Diagram>& diagrams) {
     auto it = std::find_if(diagrams.begin(), diagrams.end(), [&diag](Diagram& elem) {
         return equalNames(diag, elem);
@@ -46,7 +58,7 @@ QVector<Diagram> description_analyze::analyze(QVector<Diagram> &diagrams, QStrin
         return result;
     }
     QStringList sequences;
-
+    QSet<QString> sequenceDg;
     foreach (Diagram diag,diagrams)
     {
         if (diag.m_type==Diagram::Type::robustness)
@@ -70,6 +82,7 @@ QVector<Diagram> description_analyze::analyze(QVector<Diagram> &diagrams, QStrin
                 }
                 new_diag.m_type = Diagram::Type::sequence;
                 insert(new_diag,result);
+                sequenceDg.insert(new_diag.m_name);
                 int index_elem = 0;
                 QJsonValue list_seq = seq_list.toObject().value("seq");
                 if (!(list_seq.toObject().keys().empty()))
@@ -105,6 +118,16 @@ QVector<Diagram> description_analyze::analyze(QVector<Diagram> &diagrams, QStrin
                 }
                 update(Diagram(it->m_type,it->m_name,it->m_text), result);
             }
+        }
+    }
+    for (int i=0;i<result.count();i++)
+    {
+        if (std::find_if(sequenceDg.begin(), sequenceDg.end(), [=](QString name) {
+                    return name == result[i].m_name;
+                })==sequenceDg.end()
+                && result[i].m_type == Diagram::Type::sequence)
+        {
+            remove(result[i],result);
         }
     }
     return result;

@@ -9,6 +9,7 @@ namespace description_analyze {
     bool equalNames(const Diagram& lhs, const Diagram& rhs);
     void insert(const Diagram& diag, QVector<Diagram>& diagrams);
     void update(const Diagram& diag, QVector<Diagram>& diagrams);
+    void remove(const Diagram& diag, QVector<Diagram>& diagrams);
 }
 
 #endif // DESCRIPTION_ANALYZE_H

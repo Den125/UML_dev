@@ -8,11 +8,12 @@ ToolBar::ToolBar(QWidget* parent, bool picW, bool fileW, bool treeW)
     m_newA->setShortcut(QKeySequence(tr("Alt+N")));
     QAction *m_openA = new QAction(QIcon(":/resource/open.png"), "Открыть проект", this);
     m_openA->setShortcut(QKeySequence(tr("Alt+O")));
+    m_saveProject = new QAction(QIcon(":/resource/saveProject.png"),"Сохранить проект", this);
     m_closeA = new QAction(QIcon(":/resource/close.png"), "Закрыть проект", this);
     m_closeA->setShortcut(QKeySequence(tr("Alt+C")));
     m_saveDg = new QAction(QIcon(":/resource/save.png"), "Сохранить диаграмму", this);
     m_run = new QAction(QIcon(":/resource/diagram.png"), "Построить диаграмму",this);
-    m_saveAll = new QAction(QIcon(":/resource/save_all.png"), "Сохранить все диаграммы", this);
+    m_saveAll = new QAction(QIcon(":/resource/save_all.png"), "Сохранить все открытые диаграммы", this);
     m_analyze = new QAction(QIcon(":/resource/analyze.png"), "Анализировать", this);
     m_description = new QAction(QIcon(":/resource/description.png"),"Открыть описание", this);
     m_report = new QAction(QIcon(":/resource/report.png"),"Генерировать отчет", this);
@@ -26,7 +27,7 @@ ToolBar::ToolBar(QWidget* parent, bool picW, bool fileW, bool treeW)
     m_pictureDW->setCheckable(true);
     m_pictureDW->setChecked(picW);
 
-    addActions(QList<QAction*> {m_newA, m_openA, m_closeA});
+    addActions(QList<QAction*> {m_newA, m_openA, m_saveProject, m_closeA});
     addSeparator();
     addActions(QList<QAction*> {m_fileDW, m_treeDW, m_pictureDW});
     addSeparator();
@@ -34,6 +35,7 @@ ToolBar::ToolBar(QWidget* parent, bool picW, bool fileW, bool treeW)
 
     connect(m_newA, SIGNAL(triggered()), SIGNAL(newProject()));
     connect(m_openA, SIGNAL(triggered()), SIGNAL(openProject()));
+    connect(m_saveProject, SIGNAL(triggered()), SIGNAL(saveProject()));
     connect(m_closeA, SIGNAL(triggered()), SIGNAL(closeProject()));
     connect(m_run, SIGNAL(triggered()), SIGNAL(buildDiagram()));
     connect(m_saveDg, SIGNAL(triggered()), SIGNAL(saveDiagram()));
@@ -48,6 +50,7 @@ ToolBar::ToolBar(QWidget* parent, bool picW, bool fileW, bool treeW)
 
 void ToolBar::activateActions(bool flag)
 {
+    m_saveProject->setEnabled(flag);
     m_closeA->setEnabled(flag);
     m_run->setEnabled(flag);
     m_saveDg->setEnabled(flag);

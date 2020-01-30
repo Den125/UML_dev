@@ -14,6 +14,7 @@ public:
 signals:
     void newProject();
     void openProject();
+    void saveProject();
     void closeProject();
     void saveDiagram();
     void saveAll();
@@ -28,7 +29,7 @@ signals:
     void report();
 
 private:
-    QAction*m_closeA, *m_saveDg, *m_run, *m_saveAll, *m_analyze, *m_description, *m_report;
+    QAction *m_saveProject, *m_closeA, *m_saveDg, *m_run, *m_saveAll, *m_analyze, *m_description, *m_report;
     /* *m_newA, *m_openA,*/ /* *m_fileDW,
             *m_treeDW, *m_pictureDW, */
 };

@@ -24,6 +24,7 @@ signals:
     void update(QVector<Diagram>);
 public slots:
     void saveDiagram(Diagram diag);
+    void saveProject();
     void analyze();
 private slots:
     void onItemSelected(QTreeWidgetItem *item, int column);
@@ -31,7 +32,10 @@ private slots:
     void deleteDiagram();
     void openImage();
 private:
+    void updateTree(QVector<Diagram>& diagrams);
+    void checkDeleted(QVector<Diagram>);
     QVector<Diagram> m_project;
+    QSet<QString> deleted;
 
 };
 
