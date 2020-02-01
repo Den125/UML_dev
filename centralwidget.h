@@ -10,7 +10,7 @@ class PictureWidget;
 class Running;
 class ToolBar;
 #include "singleton.h"
-
+class UsersDockWidget;
 
 class CentralWidget : public QMainWindow
 {
@@ -35,6 +35,7 @@ public slots:
 private slots:
     void closeEvent(QCloseEvent* event);
     void closeDescription();
+    void saveProject();
 private:
     void open_ini();
     void createWorkspace();
@@ -42,7 +43,7 @@ private:
     TreeWidget *m_tree;
     UMLTabWidget *m_tabs;
     PictureWidget *m_picture;
-    QDockWidget *m_file, *m_image, *m_structure;
+    UsersDockWidget *m_file, *m_image, *m_structure;
     ToolBar *m_tool;
     Running *m_run;
 };

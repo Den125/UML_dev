@@ -13,7 +13,7 @@ public slots:
     void loadImage(const QString &fileName);
 protected:
     void paintEvent(QPaintEvent *event);
-    QImage m_Image;
+    QPixmap m_pixmap;
 };
 
 #endif // PICTUREWIDGET_H

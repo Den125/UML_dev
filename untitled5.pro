@@ -30,7 +30,8 @@ SOURCES += \
     treewidget.cpp \
     umltabwidget/uml_highlighter.cpp \
     umltabwidget/umltabwidget.cpp \
-    umltabwidget/umltexteditwidget.cpp
+    umltabwidget/umltexteditwidget.cpp \
+    usersdockwidget.cpp
 
 HEADERS += \
     centralwidget.h \
@@ -48,7 +49,8 @@ HEADERS += \
     treewidget.h \
     umltabwidget/uml_highlighter.hpp \
     umltabwidget/umltabwidget.h \
-    umltabwidget/umltexteditwidget.h
+    umltabwidget/umltexteditwidget.h \
+    usersdockwidget.h
 
 FORMS +=
 

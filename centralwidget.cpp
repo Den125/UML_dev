@@ -14,13 +14,14 @@
 #include "running.h"
 #include "description/descriptionwidget.h"
 #include "report_generate.h"
+#include "usersdockwidget.h"
 #include <QDebug>
 
 CentralWidget::CentralWidget(QWidget *parent)
     : QMainWindow(parent),      
-      m_file(new QDockWidget("Активные файлы", this)),
-      m_image(new QDockWidget("Диаграмма", this)),
-      m_structure(new QDockWidget("Структура проекта", this))
+      m_file(new UsersDockWidget(this,"Активные файлы")),
+      m_image(new UsersDockWidget(this, "Диаграмма")),
+      m_structure(new UsersDockWidget(this, "Структура проекта"))
 {
     setWindowTitle("Средство проектирования ПО");
 
@@ -50,7 +51,13 @@ void CentralWidget::newProject()
 {
     QString dir = QFileDialog::getExistingDirectory(nullptr, "Выбор папки", "");
     if (dir.isNull())
+    {
+        QMessageBox error(QMessageBox::Critical, "Ошибка",
+                          "Директория проекта не может быть пустой",
+                          QMessageBox::Ok, this);
+        error.exec();
         return;
+    }
     bool ok;
     QString name = QInputDialog::getText(nullptr, "Название проекта",
                                          "Введите название вашего проекта", QLineEdit::Normal,
@@ -58,7 +65,13 @@ void CentralWidget::newProject()
     if (ok && !(name.isNull()))
     {
         if (!project_ns::create(dir,name))
+        {
+            QMessageBox error(QMessageBox::Critical, "Ошибка",
+                              "Ошбика при создании проекта. Проверьте директорию и путь к ней!",
+                              QMessageBox::Ok, this);
+            error.exec();
             return;
+        }
         createWorkspace();
         Singleton<GlobalData>::instance().project_path=dir+"/"+name;
         m_tree->m_name = name;
@@ -75,7 +88,13 @@ void CentralWidget::openProject()
     QString path = QFileDialog::getOpenFileName(nullptr, "Выбор файла проекта", "", "UMLParserProject (*.upp)");
 
     if (path.isNull())
+    {
+        QMessageBox error(QMessageBox::Critical, "Ошибка",
+                          "Путь к файлу проекта не может быть пустым",
+                          QMessageBox::Ok, this);
+        error.exec();
         return;
+    }
 
     createWorkspace();
 
@@ -99,7 +118,7 @@ void CentralWidget::createWorkspace()
     m_file->setWidget(m_tabs);
     m_image->setWidget(m_picture);
 
-    connect(m_tool, SIGNAL(saveProject()), m_tree, SLOT(saveProject()));
+    connect(m_tool, SIGNAL(saveProject()), this, SLOT(saveProject()));
     connect(m_tool, SIGNAL(analyze()), this, SLOT(analyzing()));
     connect(m_tool, SIGNAL(saveDiagram()), m_tabs, SLOT(saveTab()));
     connect(m_tool, SIGNAL(saveAll()), m_tabs, SLOT(saveTabs()));
@@ -250,4 +269,14 @@ void CentralWidget::reportGenerate()
 {
      m_tabs->saveTabs();
      Report_generate::generatePdf(Singleton<GlobalData>::instance().project_path);
+}
+
+void CentralWidget::saveProject()
+{
+    m_tabs->saveTabs();
+    m_tree->saveProject();
+    QMessageBox complete(QMessageBox::Information,
+                         "Сохранение", "Проект успешно сохранен",
+                         QMessageBox::Ok, this);
+    complete.exec();
 }

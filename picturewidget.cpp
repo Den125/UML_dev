@@ -6,26 +6,29 @@ PictureWidget::PictureWidget(QWidget *parent):QWidget (parent)
 
 }
 
+void PictureWidget::paintEvent(QPaintEvent *event) {
+  QPainter painter(this);
+
+  if (false == m_pixmap.isNull()) {
+    QSize widgetSize = size();
+    QPixmap scaledPixmap = m_pixmap.scaled(widgetSize, Qt::KeepAspectRatio);
+    QPoint center((widgetSize.width() - scaledPixmap.width())/2,
+                  (widgetSize.height() - scaledPixmap.height())/2);
+    painter.drawPixmap(center, scaledPixmap);
+  }
+
+  QWidget::paintEvent(event);
+}
 void PictureWidget::loadImage(const QString &fileName)
 {
     if(!fileName.isNull())
     {
-        m_Image.load(fileName);
-        this->update();
-        setMinimumSize(m_Image.size());
-    }
-}
-
-void PictureWidget::paintEvent(QPaintEvent *event)
-{
-    QPainter p(this);
-    if(!m_Image.isNull())
-    {
-        p.drawImage(QPoint(0,0),m_Image);
+        m_pixmap.load(fileName);
+        update();
     }
 }
 
 void PictureWidget::clear()
 {
-    this->update();
+    update();
 }
