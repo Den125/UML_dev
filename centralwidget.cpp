@@ -16,6 +16,7 @@
 #include "report_generate.h"
 #include "usersdockwidget.h"
 #include <QDebug>
+#include <QLibrary>
 
 CentralWidget::CentralWidget(QWidget *parent)
     : QMainWindow(parent),      
@@ -44,6 +45,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     connect(m_tool, SIGNAL(visibleStructure(bool)), this, SLOT(setStructureVisible(bool)));
     connect(m_tool, SIGNAL(visiblePicture(bool)), this, SLOT(setPictureVisible(bool)));
     connect(m_tool, SIGNAL(visibleFile(bool)), this, SLOT(setFileVisible(bool)));
+    connect(m_tool, SIGNAL(about()), this, SLOT(about()));
 
 }
 
@@ -146,6 +148,8 @@ void CentralWidget::closeProject()
 
 void CentralWidget::building()
 {
+    if (m_tabs->count()==0)
+        return;
     m_tabs->saveTab();
     m_image->setEnabled(false);
     m_file->setEnabled(false);
@@ -279,4 +283,16 @@ void CentralWidget::saveProject()
                          "Сохранение", "Проект успешно сохранен",
                          QMessageBox::Ok, this);
     complete.exec();
+}
+
+void CentralWidget::about()
+{
+    QMessageBox about(QMessageBox::Information,
+                         "О программе",
+                      "Средство для проектирования ПО v2.5.4\n"
+                      "Разработал: студент 4 курса ИКИТ СФУ\n"
+                      "Исайкин Александр\n"
+                      "Научный руководитель: Васильев Владимир Сергеевич",
+                         QMessageBox::Ok, this);
+    about.exec();
 }

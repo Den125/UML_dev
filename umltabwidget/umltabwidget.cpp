@@ -10,6 +10,7 @@ UMLTabWidget::UMLTabWidget(QWidget* parent):
     setTabsClosable(true);
     connect(this, SIGNAL(tabCloseRequested(int)),
             this, SLOT(closeTab(int)));
+
 }
 
 void UMLTabWidget::createTab(Diagram diag)

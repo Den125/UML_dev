@@ -25,7 +25,7 @@ ToolBar::ToolBar(QWidget* parent, bool picW, bool fileW, bool treeW)
     m_report = new QAction(QIcon(":/resource/report.png"),"Генерировать отчет (Ctrl+G)", this);
     m_report->setShortcut(QKeySequence(tr("Ctrl+G")));
     QAction *m_fileDW = new QAction(QIcon(":/resource/file.png"), "Показать/скрыть файловый виджет", this);
-    m_fileDW->setCheckable(true);
+    m_fileDW->setCheckable(true);    
     m_fileDW->setChecked(fileW);
     QAction *m_treeDW = new QAction(QIcon(":/resource/Structure.png"), "Показать/скрыть виджет структуры", this);
     m_treeDW->setCheckable(true);
@@ -33,12 +33,15 @@ ToolBar::ToolBar(QWidget* parent, bool picW, bool fileW, bool treeW)
     QAction *m_pictureDW = new QAction(QIcon(":/resource/picture.png"), "Показать/скрыть виджет изображения", this);
     m_pictureDW->setCheckable(true);
     m_pictureDW->setChecked(picW);
+    QAction *m_about = new QAction(QIcon(":/resource/about.png"), "О программе", this);
 
     addActions(QList<QAction*> {m_newA, m_openA, m_saveProject, m_closeA});
     addSeparator();
     addActions(QList<QAction*> {m_fileDW, m_treeDW, m_pictureDW});
     addSeparator();
     addActions(QList<QAction*> {m_run, m_saveDg, m_saveAll, m_analyze, m_description, m_report});
+    addSeparator();
+    addAction(m_about);
 
     connect(m_newA, SIGNAL(triggered()), SIGNAL(newProject()));
     connect(m_openA, SIGNAL(triggered()), SIGNAL(openProject()));
@@ -53,6 +56,7 @@ ToolBar::ToolBar(QWidget* parent, bool picW, bool fileW, bool treeW)
     connect(m_analyze, SIGNAL(triggered()), SIGNAL(analyze()));
     connect(m_description, SIGNAL(triggered()), SIGNAL(description()));
     connect(m_report, SIGNAL(triggered()), SIGNAL(report()));
+    connect(m_about, SIGNAL(triggered()), SIGNAL(about()));
 }
 
 void ToolBar::activateActions(bool flag)

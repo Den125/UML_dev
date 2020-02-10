@@ -13,5 +13,6 @@
         <file>resource/description.png</file>
         <file>resource/report.png</file>
         <file>resource/saveProject.png</file>
+        <file>resource/about.png</file>
     </qresource>
 </RCC>

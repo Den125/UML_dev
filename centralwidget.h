@@ -2,6 +2,7 @@
 #define CENTRAL_WIDGET_H
 
 #include <QMainWindow>
+#include "singleton.h"
 
 class QDockWidget;
 class TreeWidget;
@@ -9,7 +10,6 @@ class UMLTabWidget;
 class PictureWidget;
 class Running;
 class ToolBar;
-#include "singleton.h"
 class UsersDockWidget;
 
 class CentralWidget : public QMainWindow
@@ -31,11 +31,13 @@ public slots:
     void setStructureVisible(bool visible);
     void setFileVisible(bool visible);
     void setPictureVisible(bool visible);
+    void about();
 
 private slots:
     void closeEvent(QCloseEvent* event);
     void closeDescription();
     void saveProject();
+
 private:
     void open_ini();
     void createWorkspace();

@@ -28,10 +28,9 @@ signals:
     void description();
     void report();
 
+    void about();
 private:
     QAction *m_saveProject, *m_closeA, *m_saveDg, *m_run, *m_saveAll, *m_analyze, *m_description, *m_report;
-    /* *m_newA, *m_openA,*/ /* *m_fileDW,
-            *m_treeDW, *m_pictureDW, */
 };
 
 #endif // TOOLBAR_H
