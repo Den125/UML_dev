@@ -1,5 +1,6 @@
 #include <QDebug>
 
+#include <QLibrary>
 #include <QMenu>
 #include <QMessageBox>
 #include "treewidget.h"
@@ -67,6 +68,8 @@ void TreeWidget::onItemSelected(QTreeWidgetItem *item, int column)
 
     if (it != m_project.end()) {
         emit selected(*it);
+        emit diagram(Singleton<GlobalData>::instance().project_path + '/' +
+                     project_ns::type_to_string(it->m_type) + '/' + it->m_name + ".png");
     }
 }
 
@@ -148,14 +151,47 @@ void TreeWidget::openImage()
 
 void TreeWidget::analyze()
 {
-    load(Analyzer::analyze(m_project));
-    saveProject();
-    emit update(m_project);
+    QString lib_name = "analyzer";
+    QLibrary lib(lib_name);
+    if(!lib.load())
+    {
+       QMessageBox error(QMessageBox::Critical, "Ошибка!",
+                         "Библиотека анализа не обнаружена!"
+                         "Пожалуйста проверьте ее наличие!",
+                         QMessageBox::Ok,this);
+       error.exec();
+       return;
+    }
+    typedef QVector<Diagram> (*analyzer)(QVector<Diagram>);
+    analyzer analyze = (analyzer) lib.resolve("analyze");
+    if (analyze)
+    {
+        load(analyze(m_project));
+        saveProject();
+        emit update(m_project);
+    }
 }
 
 QMap<QString,QStringList> TreeWidget::getActors()
 {
-    return Analyzer::get_actors_list(m_project);
+    QString lib_name = "analyzer";
+    QLibrary lib(lib_name);
+    if(!lib.load())
+    {
+       QMessageBox error(QMessageBox::Critical, "Ошибка!",
+                         "Библиотека анализа не обнаружена!"
+                         "Пожалуйста проверьте ее наличие!",
+                         QMessageBox::Ok,this);
+       error.exec();
+       return QMap<QString,QStringList>();
+    }
+    typedef QMap<QString,QStringList> (*analyzer)(QVector<Diagram>);
+    analyzer get_actors = (analyzer) lib.resolve("get_actors_list");
+    if (get_actors)
+    {
+        return get_actors(m_project);
+    }
+    return QMap<QString,QStringList>();
 }
 
 QStringList TreeWidget::getRobustnessList()

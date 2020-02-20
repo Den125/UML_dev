@@ -13,7 +13,6 @@
 #include "toolbar.h"
 #include "running.h"
 #include "description/descriptionwidget.h"
-#include "report_generate.h"
 #include "usersdockwidget.h"
 #include <QDebug>
 #include <QLibrary>
@@ -256,7 +255,7 @@ void CentralWidget::description()
         info.exec();
         return;
     }
-    QMap<QString,QStringList> map_actors=m_tree->getActors();
+    QMap<QString,QStringList> map_actors = m_tree->getActors();
     actors_list=map_actors.keys();
     DescriptionWidget *m_descriptionWidget=new DescriptionWidget(this,robustness_list,map_actors);
     connect(m_descriptionWidget,SIGNAL(finished(int)),this,SLOT(closeDescription()));
@@ -272,7 +271,23 @@ void CentralWidget::closeDescription()
 void CentralWidget::reportGenerate()
 {
      m_tabs->saveTabs();
-     Report_generate::generatePdf(Singleton<GlobalData>::instance().project_path);
+     QString lib_name = "report_generate";
+     QLibrary lib(lib_name);
+     if(!lib.load())
+     {
+        QMessageBox error(QMessageBox::Critical, "Ошибка!",
+                          "Библиотека генерации отчета не обнаружена!"
+                          "Пожалуйста проверьте ее наличие!",
+                          QMessageBox::Ok,this);
+        error.exec();
+        return;
+     }
+     typedef void (*generatePdf)(QString);
+     generatePdf generate = (generatePdf) lib.resolve("generatePdf");
+     if (generate)
+     {
+         generate(Singleton<GlobalData>::instance().project_path);
+     }
 }
 
 void CentralWidget::saveProject()

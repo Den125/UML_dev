@@ -41,33 +41,33 @@ void savePrecedent(QString name, precedentData data)
          seq.insert("seq",seq_vect);
          key_elem.insert("list_seq"+QString::number(i),seq);
      }
-     QFile *JSON= new QFile(Singleton<GlobalData>::instance().project_path+"/description.json");
+     QFile JSON(Singleton<GlobalData>::instance().project_path+"/description.json");
      QJsonDocument doc;
-     if (JSON->open(QIODevice::ReadOnly))
+     if (JSON.open(QIODevice::ReadOnly))
      {
-         doc=QJsonDocument::fromJson(JSON->readAll());
-         JSON->close();
+         doc=QJsonDocument::fromJson(JSON.readAll());
+         JSON.close();
      }
      QJsonObject root = doc.object();
      root.insert(name,key_elem);
-     if (JSON->open(QIODevice::WriteOnly))
+     if (JSON.open(QIODevice::WriteOnly))
      {
-         JSON->write(QJsonDocument(root).toJson());
-         JSON->close();
+         JSON.write(QJsonDocument(root).toJson());
+         JSON.close();
      }
 }
 
 precedentData loadPrecedent(QString name)
 {
     precedentData new_precedent;
-    QFile *JSON= new QFile(Singleton<GlobalData>::instance().project_path+"/description.json");
+    QFile JSON(Singleton<GlobalData>::instance().project_path+"/description.json");
     QJsonDocument doc;
-    if (!(JSON->open(QIODevice::ReadOnly)))
+    if (!(JSON.open(QIODevice::ReadOnly)))
     {
         return new_precedent;
     }
-    doc=QJsonDocument::fromJson(JSON->readAll());
-    JSON->close();
+    doc=QJsonDocument::fromJson(JSON.readAll());
+    JSON.close();
     QJsonObject root = doc.object();
     QJsonValue jsvalue = root.value(name);
     QStringList keys=jsvalue.toObject().keys();

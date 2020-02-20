@@ -14,5 +14,6 @@
         <file>resource/report.png</file>
         <file>resource/saveProject.png</file>
         <file>resource/about.png</file>
+        <file>resource/error_image.png</file>
     </qresource>
 </RCC>

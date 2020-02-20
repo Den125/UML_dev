@@ -16,7 +16,10 @@ UMLTabWidget::UMLTabWidget(QWidget* parent):
 void UMLTabWidget::createTab(Diagram diag)
 {
     if (isSuchTabOpened(diag.m_name))
+    {
+        setCurrentIndex(getIndex(diag.m_name));
         return;
+    }
 
     UMLTextEditWidget* tab = new UMLTextEditWidget(this, &diag);
     addTab(tab, diag.m_name);
