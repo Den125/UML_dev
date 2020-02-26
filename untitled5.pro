@@ -31,7 +31,8 @@ SOURCES += \
     umltabwidget/uml_highlighter.cpp \
     umltabwidget/umltabwidget.cpp \
     umltabwidget/umltexteditwidget.cpp \
-    usersdockwidget.cpp
+    usersdockwidget.cpp \
+    utilty.cpp
 
 HEADERS += \
     centralwidget.h \
@@ -50,7 +51,8 @@ HEADERS += \
     umltabwidget/uml_highlighter.hpp \
     umltabwidget/umltabwidget.h \
     umltabwidget/umltexteditwidget.h \
-    usersdockwidget.h
+    usersdockwidget.h \
+    utilty.h
 
 FORMS +=
 
@@ -62,17 +64,3 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     resources.qrc
     win32:RC_ICONS = $$PWD/resource/main.ico
-
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-analyzer-Desktop_Qt_5_9_1_MinGW_32bit-Release/release/ -lanalyzer
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-analyzer-Desktop_Qt_5_9_1_MinGW_32bit-Debug/debug/ -lanalyzer
-else:unix: LIBS += -L$$PWD/../build-analyzer-Desktop_Qt_5_9_1_MinGW_32bit-Release/ -lanalyzer
-
-INCLUDEPATH += $$PWD/../analyzer
-DEPENDPATH += $$PWD/../analyzer
-
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-report_generate-Desktop_Qt_5_9_1_MinGW_32bit-Release/release/ -lreport_generate
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-report_generate-Desktop_Qt_5_9_1_MinGW_32bit-Debug/debug/ -lreport_generate
-#else:unix: LIBS += -L$$PWD/../build-report_generate-Desktop_Qt_5_9_1_MinGW_32bit-Release/ -lreport_generate
-
-#INCLUDEPATH += $$PWD/../report_generate
-#DEPENDPATH += $$PWD/../report_generate

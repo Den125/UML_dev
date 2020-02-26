@@ -8,6 +8,7 @@
 #include "project.h"
 #include "globaldata.h"
 #include "description/description_analyze.h"
+#include "utilty.h"
 
 TreeWidget::TreeWidget(QWidget* parent)
     : QTreeWidget(parent) {
@@ -151,47 +152,36 @@ void TreeWidget::openImage()
 
 void TreeWidget::analyze()
 {
-    QString lib_name = "analyzer";
-    QLibrary lib(lib_name);
-    if(!lib.load())
-    {
-       QMessageBox error(QMessageBox::Critical, "Ошибка!",
-                         "Библиотека анализа не обнаружена!"
-                         "Пожалуйста проверьте ее наличие!",
-                         QMessageBox::Ok,this);
-       error.exec();
-       return;
-    }
+    QLibrary* lib =load_library("analyzer");
+    if (lib == nullptr)
+        return;
+
     typedef QVector<Diagram> (*analyzer)(QVector<Diagram>);
-    analyzer analyze = (analyzer) lib.resolve("analyze");
+    analyzer analyze = (analyzer) lib->resolve("analyze");
     if (analyze)
     {
         load(analyze(m_project));
         saveProject();
         emit update(m_project);
     }
+    delete lib;
 }
 
 QMap<QString,QStringList> TreeWidget::getActors()
 {
-    QString lib_name = "analyzer";
-    QLibrary lib(lib_name);
-    if(!lib.load())
-    {
-       QMessageBox error(QMessageBox::Critical, "Ошибка!",
-                         "Библиотека анализа не обнаружена!"
-                         "Пожалуйста проверьте ее наличие!",
-                         QMessageBox::Ok,this);
-       error.exec();
-       return QMap<QString,QStringList>();
-    }
+    QLibrary *lib = load_library("analyzer");
+    if (lib == nullptr)
+        return QMap<QString,QStringList>();
+
     typedef QMap<QString,QStringList> (*analyzer)(QVector<Diagram>);
-    analyzer get_actors = (analyzer) lib.resolve("get_actors_list");
+    analyzer get_actors = (analyzer) lib->resolve("get_actors_list");
+    QMap<QString,QStringList> map_actors;
     if (get_actors)
     {
-        return get_actors(m_project);
+        map_actors = get_actors(m_project);
     }
-    return QMap<QString,QStringList>();
+    delete lib;
+    return map_actors;
 }
 
 QStringList TreeWidget::getRobustnessList()
@@ -210,7 +200,8 @@ QStringList TreeWidget::getRobustnessList()
 
 void TreeWidget::analyze_descirption()
 {
-    load(description_analyze::analyze(m_project,Singleton<GlobalData>::instance().project_path + "/description.json"));
+    load(description_analyze::analyze(m_project,
+                                      Singleton<GlobalData>::instance().project_path + "/description.json"));
     saveProject();
     emit update(m_project);
 }

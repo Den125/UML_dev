@@ -3,7 +3,6 @@
 
 #include <QTreeWidget>
 #include "diagram.h"
-#include "analyzer.h"
 
 class TreeWidget : public QTreeWidget
 {

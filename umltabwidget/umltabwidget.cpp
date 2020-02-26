@@ -34,7 +34,7 @@ bool UMLTabWidget::isSuchTabOpened(const QString &name)
 {
     for (int i = 0; i < count(); i++)
     {
-        if (tabText(i) == name)
+        if (m_tabs[i]->m_diag.m_name == name)
             return true;
     }
     return false;

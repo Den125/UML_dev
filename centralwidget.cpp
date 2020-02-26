@@ -5,6 +5,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QSettings>
+#include <QLibrary>
 #include "project.h"
 #include "globaldata.h"
 #include "treewidget.h"
@@ -14,8 +15,8 @@
 #include "running.h"
 #include "description/descriptionwidget.h"
 #include "usersdockwidget.h"
+#include "utilty.h"
 #include <QDebug>
-#include <QLibrary>
 
 CentralWidget::CentralWidget(QWidget *parent)
     : QMainWindow(parent),      
@@ -45,6 +46,8 @@ CentralWidget::CentralWidget(QWidget *parent)
     connect(m_tool, SIGNAL(visiblePicture(bool)), this, SLOT(setPictureVisible(bool)));
     connect(m_tool, SIGNAL(visibleFile(bool)), this, SLOT(setFileVisible(bool)));
     connect(m_tool, SIGNAL(about()), this, SLOT(about()));
+
+    check_plantuml();
 
 }
 
@@ -271,23 +274,17 @@ void CentralWidget::closeDescription()
 void CentralWidget::reportGenerate()
 {
      m_tabs->saveTabs();
-     QString lib_name = "report_generate";
-     QLibrary lib(lib_name);
-     if(!lib.load())
-     {
-        QMessageBox error(QMessageBox::Critical, "Ошибка!",
-                          "Библиотека генерации отчета не обнаружена!"
-                          "Пожалуйста проверьте ее наличие!",
-                          QMessageBox::Ok,this);
-        error.exec();
-        return;
-     }
+     QLibrary* lib = load_library("report_generate");
+     if (lib == nullptr)
+         return;
+
      typedef void (*generatePdf)(QString);
-     generatePdf generate = (generatePdf) lib.resolve("generatePdf");
+     generatePdf generate = (generatePdf) lib->resolve("generatePdf");
      if (generate)
      {
          generate(Singleton<GlobalData>::instance().project_path);
      }
+     delete lib;
 }
 
 void CentralWidget::saveProject()

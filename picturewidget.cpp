@@ -14,7 +14,7 @@ void PictureWidget::paintEvent(QPaintEvent *event) {
     QImage scaledPixmap = m_pixmap.scaled(widgetSize, Qt::KeepAspectRatio);
     QPoint center((widgetSize.width() - scaledPixmap.width())/2,
                   (widgetSize.height() - scaledPixmap.height())/2);
-    painter.drawImage(0,0,/*center,*/ scaledPixmap);
+    painter.drawImage(0,0, scaledPixmap);
   }
 
   QWidget::paintEvent(event);

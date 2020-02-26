@@ -78,6 +78,7 @@ QVector<Diagram> description_analyze::analyze(QVector<Diagram> &diagrams, QStrin
                 else
                 {
                     str.append("Альтернативная последовательность " + QString::number(index_seq) + ":\n");
+                    str.append("Условие: "+seq_list.toObject().value("usl_seq").toString()+ "\n");
                     new_diag.m_name = diag.m_name + "_alt" + QString::number(index_seq);
                 }
                 new_diag.m_type = Diagram::Type::sequence;
