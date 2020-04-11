@@ -1,10 +1,15 @@
 #include "utilty.h"
 #include <QMessageBox>
 #include <QFile>
+#include <QApplication>
 
 QLibrary* load_library (QString name)
 {
+    #ifdef Q_OS_WIN
     QLibrary *lib = new QLibrary(name);
+#else
+    QLibrary *lib = new QLibrary(QApplication::applicationDirPath()+'/'+name);
+#endif
     if (!lib->load())
     {
         QMessageBox error(QMessageBox::Critical, "Ошибка!",
