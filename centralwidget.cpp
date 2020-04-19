@@ -31,7 +31,6 @@ CentralWidget::CentralWidget(QWidget *parent)
     addDockWidget(Qt::BottomDockWidgetArea, m_image);
 
     open_ini();
-
     m_tool = new ToolBar(this,m_image->isVisible(),m_file->isVisible(),m_structure->isVisible());
     addToolBar(m_tool);
     m_tool->activateActions(false);
@@ -141,6 +140,9 @@ void CentralWidget::closeProject()
     m_tabs->saveTabs();
     m_tool->activateActions(false);
     setWindowTitle("Средство проектирования ПО");
+    disconnect(m_tool, SIGNAL(saveProject()), this, SLOT(saveProject()));
+    disconnect(m_tool, SIGNAL(analyze()), this, SLOT(analyzing()));
+    disconnect(m_tool, SIGNAL(report()), this, SLOT(reportGenerate()));
     delete m_tree;
     delete m_tabs;
     delete m_picture;
