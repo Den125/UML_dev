@@ -19,6 +19,10 @@ void Running::run(QString fileName)
 
 void Running::command_complete(int exitCode)
 {
+    if (exitCode!=0)
+    {
+
+    }
     FileName.chop(4);
     emit complete(FileName+".png");
 }

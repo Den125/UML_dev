@@ -30,7 +30,7 @@ namespace structures
     QString type_seq(SequenceType type_d);
     void savePrecedent(QString name, precedentData);
     precedentData loadPrecedent(QString name);
-};
+}
 
 
 #endif // STRUCTURES_H

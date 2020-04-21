@@ -8,6 +8,6 @@ int main(int argc, char *argv[])
 
     CentralWidget w;
     w.show();
-
+    w.load();
     return a.exec();
 }

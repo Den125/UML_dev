@@ -11,6 +11,6 @@ namespace project_ns
     QString type_to_string(Diagram::Type type);
     void rewrite(QVector<Diagram> vector, QString file_name);
     bool create(QString path, QString name);
-};
+}
 
 #endif // PROJECT_H

@@ -1,6 +1,6 @@
 #include "toolbar.h"
 #include <QDebug>
-ToolBar::ToolBar(QWidget* parent, bool picW, bool fileW, bool treeW)
+ToolBar::ToolBar(QWidget* parent)
     :QToolBar(parent)
 {
     setMovable(false);
@@ -24,15 +24,9 @@ ToolBar::ToolBar(QWidget* parent, bool picW, bool fileW, bool treeW)
     m_analyze->setShortcut(QKeySequence(tr("Alt+D")));
     m_report = new QAction(QIcon(":/resource/report.png"),"Генерировать отчет (Ctrl+G)", this);
     m_report->setShortcut(QKeySequence(tr("Ctrl+G")));
-    QAction *m_fileDW = new QAction(QIcon(":/resource/file.png"), "Показать/скрыть файловый виджет", this);
-    m_fileDW->setCheckable(true);    
-    m_fileDW->setChecked(fileW);
-    QAction *m_treeDW = new QAction(QIcon(":/resource/Structure.png"), "Показать/скрыть виджет структуры", this);
-    m_treeDW->setCheckable(true);
-    m_treeDW->setChecked(treeW);
-    QAction *m_pictureDW = new QAction(QIcon(":/resource/picture.png"), "Показать/скрыть виджет изображения", this);
-    m_pictureDW->setCheckable(true);
-    m_pictureDW->setChecked(picW);
+    m_fileDW = new QAction(QIcon(":/resource/file.png"), "Показать/скрыть файловый виджет", this);
+    m_treeDW = new QAction(QIcon(":/resource/Structure.png"), "Показать/скрыть виджет структуры", this);
+    m_pictureDW = new QAction(QIcon(":/resource/picture.png"), "Показать/скрыть виджет изображения", this);
     QAction *m_about = new QAction(QIcon(":/resource/about.png"), "О программе", this);
 
     addActions(QList<QAction*> {m_newA, m_openA, m_saveProject, m_closeA});
@@ -69,4 +63,14 @@ void ToolBar::activateActions(bool flag)
     m_analyze->setEnabled(flag);
     m_description->setEnabled(flag);
     m_report->setEnabled(flag);
+}
+
+void ToolBar::activateControls(bool picW, bool fileW, bool treeW)
+{
+    m_fileDW->setCheckable(true);
+    m_fileDW->setChecked(fileW);
+    m_treeDW->setCheckable(true);
+    m_treeDW->setChecked(treeW);
+    m_pictureDW->setCheckable(true);
+    m_pictureDW->setChecked(picW);
 }

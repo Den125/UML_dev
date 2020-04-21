@@ -8,9 +8,9 @@ class ToolBar: public  QToolBar
 {
     Q_OBJECT
 public:
-    explicit ToolBar(QWidget *parent = nullptr, bool picW=true, bool fileW=true, bool treeW=true);
+    explicit ToolBar(QWidget *parent = nullptr);
     void activateActions(bool flag);
-
+    void activateControls(bool picW=true, bool fileW=true, bool treeW=true);
 signals:
     void newProject();
     void openProject();
@@ -30,7 +30,8 @@ signals:
 
     void about();
 private:
-    QAction *m_saveProject, *m_closeA, *m_saveDg, *m_run, *m_saveAll, *m_analyze, *m_description, *m_report;
+    QAction *m_saveProject, *m_closeA, *m_saveDg, *m_run,
+    *m_saveAll, *m_analyze, *m_description, *m_report, *m_pictureDW, *m_treeDW, *m_fileDW;
 };
 
 #endif // TOOLBAR_H

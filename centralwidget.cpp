@@ -30,8 +30,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     addDockWidget(Qt::RightDockWidgetArea, m_file);
     addDockWidget(Qt::BottomDockWidgetArea, m_image);
 
-    open_ini();
-    m_tool = new ToolBar(this,m_image->isVisible(),m_file->isVisible(),m_structure->isVisible());
+    m_tool = new ToolBar(this);
     addToolBar(m_tool);
     m_tool->activateActions(false);
 
@@ -45,9 +44,13 @@ CentralWidget::CentralWidget(QWidget *parent)
     connect(m_tool, SIGNAL(visiblePicture(bool)), this, SLOT(setPictureVisible(bool)));
     connect(m_tool, SIGNAL(visibleFile(bool)), this, SLOT(setFileVisible(bool)));
     connect(m_tool, SIGNAL(about()), this, SLOT(about()));
+}
 
+void CentralWidget::load()
+{
+    open_ini();
+    m_tool->activateControls(m_image->isVisible(),m_file->isVisible(),m_structure->isVisible());
     check_plantuml();
-
 }
 
 void CentralWidget::newProject()

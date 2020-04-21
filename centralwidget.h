@@ -32,7 +32,7 @@ public slots:
     void setFileVisible(bool visible);
     void setPictureVisible(bool visible);
     void about();
-
+    void load();
 private slots:
     void closeEvent(QCloseEvent* event);
     void closeDescription();
@@ -40,6 +40,7 @@ private slots:
 
 private:
     void open_ini();
+
     void createWorkspace();
 
     TreeWidget *m_tree;

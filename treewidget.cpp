@@ -37,7 +37,7 @@ void TreeWidget::load(QVector<Diagram> project)
 
     QTreeWidgetItem* chapter = nullptr;
 
-    for (size_t i = 0; i < project.size(); ++i) {
+    for (int i = 0; i < project.size(); ++i) {
         if (i == 0 || project[i].m_type != project[i-1].m_type) {
             chapter = new QTreeWidgetItem(this, Type::Chapter);
             chapter->setText(0, project_ns::type_to_string(project[i].m_type));
@@ -175,6 +175,7 @@ QMap<QString,QStringList> TreeWidget::getActors()
 
     typedef QMap<QString,QStringList> (*analyzer)(QVector<Diagram>);
     analyzer get_actors = (analyzer) lib->resolve("get_actors_list");
+
     QMap<QString,QStringList> map_actors;
     if (get_actors)
     {
