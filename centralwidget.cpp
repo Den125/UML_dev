@@ -56,10 +56,10 @@ void CentralWidget::load()
 void CentralWidget::newProject()
 {
     QString dir = QFileDialog::getExistingDirectory(nullptr, "Выбор папки", "");
-    if (dir.isNull())
+    if (dir.isNull() || dir.contains(QRegExp("[а-я][А-Я]")))
     {
         QMessageBox error(QMessageBox::Critical, "Ошибка",
-                          "Директория проекта не может быть пустой",
+                          "Директория проекта не может быть пустой или содержит недопустимые символы!",
                           QMessageBox::Ok, this);
         error.exec();
         return;
@@ -68,7 +68,7 @@ void CentralWidget::newProject()
     QString name = QInputDialog::getText(nullptr, "Название проекта",
                                          "Введите название вашего проекта", QLineEdit::Normal,
                                          QDir::home().dirName(), &ok);
-    if (ok && !(name.isNull()))
+    if (ok && !(name.isNull()) && !(name.contains(QRegExp("[а-я][А-Я]"))))
     {
         if (!project_ns::create(dir,name))
         {
@@ -93,7 +93,7 @@ void CentralWidget::openProject()
 {
     QString path = QFileDialog::getOpenFileName(nullptr, "Выбор файла проекта", "", "UMLParserProject (*.upp)");
 
-    if (path.isNull())
+    if (path.isNull() || path.contains(QRegExp("[а-я][А-Я]")))
     {
         QMessageBox error(QMessageBox::Critical, "Ошибка",
                           "Путь к файлу проекта не может быть пустым",
