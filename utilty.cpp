@@ -2,6 +2,8 @@
 #include <QMessageBox>
 #include <QFile>
 #include <QApplication>
+#include <QDebug>
+#include <QDir>
 
 QLibrary* load_library (QString name)
 {
@@ -24,7 +26,8 @@ QLibrary* load_library (QString name)
 
 void check_plantuml()
 {
-    QFile plantuml("plantuml.jar");
+    QFile plantuml(QCoreApplication::applicationDirPath()+QDir::separator()+"plantuml.jar");
+    qDebug()<<QCoreApplication::applicationDirPath()<<QFile(QCoreApplication::applicationDirPath()+QDir::separator()+"plantuml.jar").exists();
     if (!plantuml.exists())
     {
         QMessageBox error(QMessageBox::Critical, "Ошибка!",

@@ -26,6 +26,7 @@ SOURCES += \
     main.cpp \
     picturewidget.cpp \
     project.cpp \
+    project_data.cpp \
     running.cpp \
     toolbar.cpp \
     treewidget.cpp \
@@ -45,6 +46,7 @@ HEADERS += \
     globaldata.h \
     picturewidget.h \
     project.h \
+    project_data.h \
     running.h \
     singleton.h \
     toolbar.h \

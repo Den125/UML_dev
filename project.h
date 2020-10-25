@@ -6,7 +6,8 @@
 
 namespace project_ns
 {
-    QVector<Diagram> read(QString filename);
+   // QVector<Diagram> read(QString filename); //old_read
+    void read(QString filename); //new_read
     void save(Diagram diag);
     QString type_to_string(Diagram::Type type);
     void rewrite(QVector<Diagram> vector, QString file_name);

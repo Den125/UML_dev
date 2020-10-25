@@ -81,7 +81,8 @@ void CentralWidget::newProject()
         createWorkspace();
         Singleton<GlobalData>::instance().project_path=dir+"/"+name;
         m_tree->m_name = name;
-        m_tree->load(project_ns::read(dir+"/"+name+"/"+name+".upp"));
+        project_ns::read(dir+"/"+name+"/"+name+".upp");
+        m_tree->load();
         m_tool->activateActions(true);
         name.chop(4);
         setWindowTitle("Средство проектирования ПО - " + name);
@@ -103,8 +104,8 @@ void CentralWidget::openProject()
     }
 
     createWorkspace();
-
-    m_tree->load(project_ns::read(path));
+    project_ns::read(path);
+    m_tree->load();
 
     Singleton<GlobalData>::instance().project_path = path.left(path.lastIndexOf('/'));
 
@@ -151,6 +152,7 @@ void CentralWidget::closeProject()
     delete m_picture;
     delete m_run;
     Singleton<GlobalData>::instance().project_path.clear();
+    Singleton<GlobalData>::instance().data.clear();
 }
 
 void CentralWidget::building()
@@ -255,7 +257,7 @@ void CentralWidget::analyzing()
 
 void CentralWidget::description()
 {
-    QStringList robustness_list=m_tree->getRobustnessList(), actors_list;
+    QStringList robustness_list=Singleton<GlobalData>::instance().data.getRobustnessList(), actors_list;
     if (robustness_list.isEmpty())
     {
         QMessageBox info(QMessageBox::Icon::Warning, "Ошибка",

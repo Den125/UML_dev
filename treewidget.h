@@ -12,7 +12,8 @@ class TreeWidget : public QTreeWidget
     };
 public:
     explicit TreeWidget(QWidget *parent = nullptr);
-    void load(QVector<Diagram> project);
+    //void load(QVector<Diagram> project); //old_load
+    void load(); //new_load
     QMap<QString,QStringList> getActors();
     QStringList getRobustnessList();
     void analyze_descirption();
@@ -33,8 +34,8 @@ private slots:
 private:
     void updateTree(QVector<Diagram>& diagrams);
     void checkDeleted(QVector<Diagram>);
-    QVector<Diagram> m_project;
-    QSet<QString> deleted;
+    //QVector<Diagram> m_project; //перенесено в синглтон
+    //QSet<QString> deleted; //перенесено в синглтон
 
 };
 
