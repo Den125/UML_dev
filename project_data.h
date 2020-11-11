@@ -13,8 +13,10 @@ public:
     Project_data();
     void sort();
     void clear();
+    void load(QVector<Diagram> diagrams);
     bool checkDiagram(QString name);
     void checkDeleted(QVector<Diagram> diagrams);
+    void UpdateDiagram(Diagram diag);
 
     Diagram::Type getTypeDiagram(QString name);
     Diagram getDiagramByName(QString name);

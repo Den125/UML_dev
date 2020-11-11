@@ -8,7 +8,7 @@
 QLibrary* load_library (QString name)
 {
     #ifdef Q_OS_WIN
-    QLibrary *lib = new QLibrary(name);
+    QLibrary *lib = new QLibrary(QCoreApplication::applicationDirPath()+QDir::separator()+name);
 #else
     QLibrary *lib = new QLibrary(QApplication::applicationDirPath()+'/'+name);
 #endif

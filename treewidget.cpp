@@ -97,6 +97,7 @@ void TreeWidget::saveDiagram(Diagram diag)
 
     it.m_text = diag.m_text;
     project_ns::save(it);
+    Singleton<GlobalData>::instance().data.UpdateDiagram(it);
 }
 
 void TreeWidget::menuClick(QPoint pos)
@@ -222,8 +223,9 @@ QStringList TreeWidget::getRobustnessList()
 void TreeWidget::analyze_descirption()
 {
     //тут такая же проблема с загрузкой...
-   // load(description_analyze::analyze(Singleton<GlobalData>::instance().project_data,// додумать
-        //                              Singleton<GlobalData>::instance().project_path + "/description.json"));
+    Singleton<GlobalData>::instance().data.load(description_analyze::analyze(Singleton<GlobalData>::instance().data.m_diagrams,
+                                      Singleton<GlobalData>::instance().project_path + "/description.json"));
+    load();
     saveProject();
     emit update(Singleton<GlobalData>::instance().data.m_diagrams);
 }
@@ -249,7 +251,7 @@ void TreeWidget::checkDeleted(QVector<Diagram> diagrams)
 }*/
 
 //с этой функцией я не знаю пока еще что делать....и закинуть ее по сути трудно да и оставить...
-/*
+/* Вроде тоже смог перенести в projectData.load
 void TreeWidget::updateTree(QVector<Diagram>& diagrams)
 {
     for (int i=0;i<Singleton<GlobalData>::instance().data.m_diagrams.count();i++)

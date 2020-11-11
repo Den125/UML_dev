@@ -4,6 +4,27 @@ Project_data::Project_data()
 {
 
 }
+void Project_data::load(QVector<Diagram> diagrams)
+{
+    // QVector<Diagram> project=m_diagrams;
+     //m_diagrams.clear();
+     checkDeleted(diagrams);
+     for (int i=0;i<diagrams.count();i++)
+     {
+         auto it = std::find_if(m_diagrams.begin(), m_diagrams.end(), [=](Diagram diagram) {
+             return diagram.m_name == diagrams[i].m_name;
+         });
+
+         if (it == m_diagrams.end()) {
+
+             m_diagrams.push_back(diagrams[i]);
+         }
+     }
+   // m_diagrams = diagrams;
+     sort();
+
+}
+
 void Project_data::sort() //сортировка диаграмм
 {
     std::sort(m_diagrams.begin(), m_diagrams.end(), [](const Diagram& a, const Diagram& b) {
@@ -31,6 +52,19 @@ Diagram Project_data::getDiagramByName(QString name) //получение диа
             return m_diagrams[i];
     }
     return Diagram();
+}
+
+void Project_data::UpdateDiagram(Diagram diag)
+{
+    for (int i=0;i<m_diagrams.count();i++)
+    {
+        if (m_diagrams[i].m_name == diag.m_name)
+        {
+            m_diagrams[i].m_text = diag.m_text;
+            break;
+        }
+
+    }
 }
 
 QImage Project_data::getImageByName(QString name) //это получение изображения по имени, но пока еще в разработке...ибо есть нюансы..
